@@ -1,0 +1,28 @@
+{
+  "name": "KotlinDemo",
+  "version": "1.0.0",
+  "description": "Kotlin",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoderAlee/KotlinDemo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CoderAlee/KotlinDemo/issues"
+  },
+  "homepage": "https://github.com/CoderAlee/KotlinDemo#readme",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "scripts": {
+    "release": "standard-version"
+  }
+}
