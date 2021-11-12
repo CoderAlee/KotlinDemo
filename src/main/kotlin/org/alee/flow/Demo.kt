@@ -1,20 +1,28 @@
 package org.alee.flow
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import print
+
+val flow = RequestFlow()
 
 suspend fun main() {
     "Start!!!".print()
-    val job = GlobalScope.launch {
-        RequestFlow().request().collect {
-            it.print()
-        }
-    }
-//    delay(6300L)
-//    job.cancel()
-    delay(8000L)
+    doRequest("AAAAAAAA")
+    delay(5000L)
+    doRequest("BBBBBBBB")
+    delay(18000L)
     "Over!!!".print()
+}
+
+private fun doRequest(name: String) {
+    GlobalScope.launch {
+        "$name start request".print()
+        val result = flow._request()
+        if (null == result)
+            "$name run Time Out".print()
+        else
+            result.collect { it.print() }
+        "$name request End".print()
+    }
 }

@@ -14,12 +14,16 @@ class RequestFlow {
 
     private var mTimeOutJob: Job? = null
 
+    private var mId = 1
+
 
     init {
         mOutFlow = createFlow()
     }
 
+
     private fun createFlow(): Flow<String> {
+
         return mFlow.onStart {
             "Flow Start".print()
         }.flowOn(Dispatchers.Default)
@@ -46,13 +50,13 @@ class RequestFlow {
             }
     }
 
+
     fun request(): Flow<String> {
         GlobalScope.launch {
             launch {
                 autoTimeOut()
             }
             launch {
-                mFlow.tryEmit(mRequester.request(1))
             }
         }
         return mOutFlow
@@ -67,6 +71,34 @@ class RequestFlow {
 
     private fun cancelTimeAuto() {
         mTimeOutJob?.cancel()
+    }
+
+    suspend fun _request(): Flow<String>? {
+        return withTimeoutOrNull(7 * 1000L) {
+            flow {
+                emit(mRequester.request(mId++))
+            }.onStart {
+                "Flow Start".print()
+            }.flowOn(Dispatchers.Default)
+                .onEach { "Flow onEach ! Value = [$it]".print() }
+                .map {
+                    if (it == "111") {
+                        null
+                    } else
+                        it
+                }.flowOn(Dispatchers.Unconfined)
+                .filterNotNull()
+                .map {
+                    "doSomeThin".print()
+                    delay(1000L)
+                    it
+                }
+                .onCompletion {
+                    "Flow Completion".print()
+                }.onEach {
+                    "Flow on Each Value = [$it]".print()
+                }
+        }
     }
 
 }

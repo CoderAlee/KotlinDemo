@@ -14,6 +14,6 @@ class DataRequester {
             Thread.sleep(5 * 1000L)
             "DataRequester Sleep End".print()
         }
-        it.resume("Request Success")
+        it.resume(if (2 == id) "111" else "Request Success")
     }
 }
